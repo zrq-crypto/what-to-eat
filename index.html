@@ -13,34 +13,65 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 20px;
     color: #333;
   }
   .container {
     background: white;
-    padding: 40px 30px;
+    padding: 30px 20px;
     border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     text-align: center;
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
+    margin-top: 20px;
   }
   h1 { font-size: 24px; color: #2c3e50; margin-bottom: 20px; }
+  
+  /* 分类按钮 */
+  .filter-group {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: #f1f2f6;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #57606f;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .filter-btn.active {
+    background: #2ed573;
+    color: white;
+    font-weight: bold;
+  }
+
+  /* 结果卡片 */
   .result-card {
     background: #fff3e0;
-    color: #e67e22;
-    font-size: 28px;
-    font-weight: bold;
     padding: 30px 20px;
     border-radius: 16px;
     margin: 20px 0;
-    min-height: 100px;
+    min-height: 140px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
     border: 2px dashed #f39c12;
+    transition: all 0.3s ease;
   }
+  .food-name { font-size: 28px; font-weight: bold; color: #e67e22; margin-bottom: 10px; }
+  .food-info { font-size: 14px; color: #7f8c8d; display: flex; gap: 10px; margin-bottom: 15px;}
+  .tag { background: #ecf0f1; padding: 2px 8px; border-radius: 4px; }
+  .food-reason { font-size: 15px; color: #d35400; font-style: italic; }
+
+  /* 按钮 */
   .btn-main {
     background: #e67e22;
     color: white;
@@ -55,6 +86,7 @@
     transition: transform 0.1s;
   }
   .btn-main:active { transform: scale(0.96); }
+  
   .action-group {
     display: flex;
     justify-content: space-between;
@@ -79,7 +111,19 @@
 <body>
   <div class="container">
     <h1>🍜 今天吃什么？</h1>
-    <div id="result" class="result-card">点击下方按钮，让命运决定你的午餐</div>
+    
+    <!-- 分类筛选 -->
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="setCategory('all', this)">全部</button>
+      <button class="filter-btn" onclick="setCategory('饭', this)">🍚 饭类</button>
+      <button class="filter-btn" onclick="setCategory('面', this)">🍜 面食</button>
+      <button class="filter-btn" onclick="setCategory('轻食', this)">🥗 健康轻食</button>
+    </div>
+
+    <div id="result" class="result-card">
+      <div class="food-name">点击下方按钮</div>
+      <div class="food-info">让命运决定你的午餐</div>
+    </div>
     
     <button class="btn-main" onclick="roll()">🎲 随机推荐一家</button>
     
@@ -92,28 +136,75 @@
   </div>
 
 <script>
-const foods=[
-  "一食堂麻辣香锅", "二食堂牛肉面", "三食堂自选快餐", "四食堂黄焖鸡", "五食堂螺蛳粉",
-  "沙县小吃", "麻辣烫", "烤肉拌饭", "兰州拉面", "盖浇饭", "水饺", "烤盘饭",
-  "铁板炒饭", "石锅拌饭", "酸菜鱼", "瓦罐汤", "自助餐", "手抓饼", "煎饼果子",
-  "黄焖鸡米饭", "过桥米线", "重庆小面", "鸡公煲", "炸鸡汉堡", "肠粉", "肉夹馍"
+// 这就是我们的“伪数据库”
+const foodData = [
+  { name: "一食堂麻辣香锅", type: "饭", price: 15, calorie: 800, healthy: false, reason: "碳水+脂肪，快乐加倍！" },
+  { name: "二食堂牛肉面", type: "面", price: 12, calorie: 600, healthy: false, reason: "大口嗦面，大口喝汤。" },
+  { name: "三食堂自选快餐", type: "饭", price: 10, calorie: 700, healthy: false, reason: "荤素搭配，性价比之王。" },
+  { name: "四食堂黄焖鸡", type: "饭", price: 16, calorie: 850, healthy: false, reason: "汤汁拌饭，绝绝子。" },
+  { name: "五食堂螺蛳粉", type: "面", price: 14, calorie: 550, healthy: false, reason: "闻着臭，吃着香，吃完没朋友。" },
+  { name: "轻食沙拉碗", type: "轻食", price: 18, calorie: 300, healthy: true, reason: "吃草的一天，感觉身体变轻盈了。" },
+  { name: "水煮鸡胸肉套餐", type: "轻食", price: 15, calorie: 400, healthy: true, reason: "增肌减脂必备，虽然有点难吃。" },
+  { name: "兰州拉面", type: "面", price: 13, calorie: 650, healthy: false, reason: "一清二白三红四绿，好吃！" },
+  { name: "石锅拌饭", type: "饭", price: 16, calorie: 750, healthy: false, reason: "底下的锅巴是灵魂。" },
+  { name: "番茄鸡蛋盖浇饭", type: "饭", price: 11, calorie: 600, healthy: true, reason: "不知道吃啥时的终极保底选项。" },
+  { name: "过桥米线", type: "面", price: 15, calorie: 700, healthy: false, reason: "热腾腾的汤，暖胃又暖心。" },
+  { name: "全麦三明治", type: "轻食", price: 12, calorie: 350, healthy: true, reason: "假装自己是个自律的打工人。" }
 ];
-let current="";
-function roll(){
- current=foods[Math.floor(Math.random()*foods.length)];
- const resultDiv = document.getElementById('result');
- resultDiv.innerText=current;
- resultDiv.style.color = "#e67e22";
- resultDiv.style.background = "#fff3e0";
- document.getElementById('report-msg').innerText="";
+
+let currentCategory = 'all';
+let currentFood = null;
+
+// 切换分类
+function setCategory(type, btn) {
+  currentCategory = type;
+  // 更新按钮样式
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
-function report(type){
- if(!current){alert("先摇一个食堂再说！");return;}
- document.getElementById('report-msg').innerText="✅ 已上报："+type+"（"+current+"）";
+
+// 抽取逻辑
+function roll() {
+  // 先根据分类过滤（模拟数据库查询）
+  let pool = foodData;
+  if (currentCategory !== 'all') {
+    pool = foodData.filter(food => food.type === currentCategory);
+  }
+
+  if (pool.length === 0) {
+    alert("这个分类下暂时没有菜品哦！");
+    return;
+  }
+
+  // 随机抽取
+  currentFood = pool[Math.floor(Math.random() * pool.length)];
+  
+  // 渲染界面
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    <div class="food-name">${currentFood.name}</div>
+    <div class="food-info">
+      <span class="tag">¥${currentFood.price}</span>
+      <span class="tag">${currentFood.calorie} 大卡</span>
+      <span class="tag" style="color:${currentFood.healthy ? '#27ae60' : '#e74c3c'}">
+        ${currentFood.healthy ? '健康' : '高热量'}
+      </span>
+    </div>
+    <div class="food-reason">"${currentFood.reason}"</div>
+  `;
+  document.getElementById('report-msg').innerText="";
 }
-function share(){
- if(!current){alert("先摇一个食堂再说！");return;}
- const text="今天吃什么？系统推荐我吃【"+current+"】，人少先冲！";
+
+// 上报排队情况
+function report(type) {
+ if(!currentFood){alert("先摇一个食堂再说！");return;}
+ document.getElementById('report-msg').innerText="✅ 已上报："+type+"（"+currentFood.name+"）";
+}
+
+// 分享
+function share() {
+ if(!currentFood){alert("先摇一个食堂再说！");return;}
+ const text = `今天吃什么？系统推荐我吃【${currentFood.name}】，只要¥${currentFood.price}！人少先冲！`;
  navigator.clipboard.writeText(text).then(()=>alert("分享文案已复制，快去发给同学吧！\n\n" + text)).catch(()=>prompt("手动复制",text));
 }
 </script>

@@ -5,13 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>今天吃什么 | 中华美食盲盒</title>
 
-<!-- 自动填入了你的安全密钥 -->
 <script type="text/javascript">
   window._AMapSecurityConfig = {
       securityJsCode: '19857a766d31b8391e56609c2ede0d63', 
   }
 </script>
-<!-- 自动填入了你的 Key -->
 <script src="https://webapi.amap.com/maps?v=2.0&key=7196c3f9ef466bdf10e142baadd32f5"></script>
 
 <style>
@@ -178,6 +176,7 @@ generateDatabase();
 
 let mapInstance = null;
 
+// 修复关键：每次点地图，都彻底重新渲染一遍，保证尺寸正确
 function switchPage(pageId, navEl) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + pageId).classList.add('active');
@@ -187,14 +186,19 @@ function switchPage(pageId, navEl) {
 
   if (pageId === 'rank') {
     renderRankings();
-  } else if (pageId === 'map' && !mapInstance) {
-    initMap(); 
+  } else if (pageId === 'map') {
+    setTimeout(initMap, 100); // 等页面显示出来100毫秒后再画地图
   }
 }
 
 function initMap() {
-  // 已经改成了你学校（福州外语外贸学院滨海校区）的坐标
   const centerPoint = [119.671, 25.907]; 
+
+  // 如果之前有地图，先销毁
+  if (mapInstance) {
+    mapInstance.destroy();
+    mapInstance = null;
+  }
 
   mapInstance = new AMap.Map('map-container', {
     zoom: 15, 

@@ -4,13 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>今天吃什么 | 中华美食盲盒</title>
-
-<script type="text/javascript">
-  window._AMapSecurityConfig = {
-      securityJsCode: '19857a766d31b8391e56609c2ede0d63', 
-  }
-</script>
-<script src="https://webapi.amap.com/maps?v=2.0&key=7196c3f9ef466bdf10e142baadd32f5"></script>
+<!-- 换成1.4.15稳定版，去掉了安全密钥，只要Key -->
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=7196c3f9ef466bdf10e142baadd32f5"></script>
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -176,7 +171,6 @@ generateDatabase();
 
 let mapInstance = null;
 
-// 修复关键：每次点地图，都彻底重新渲染一遍，保证尺寸正确
 function switchPage(pageId, navEl) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + pageId).classList.add('active');
@@ -187,14 +181,13 @@ function switchPage(pageId, navEl) {
   if (pageId === 'rank') {
     renderRankings();
   } else if (pageId === 'map') {
-    setTimeout(initMap, 100); // 等页面显示出来100毫秒后再画地图
+    setTimeout(initMap, 100);
   }
 }
 
 function initMap() {
   const centerPoint = [119.671, 25.907]; 
 
-  // 如果之前有地图，先销毁
   if (mapInstance) {
     mapInstance.destroy();
     mapInstance = null;
@@ -203,7 +196,7 @@ function initMap() {
   mapInstance = new AMap.Map('map-container', {
     zoom: 15, 
     center: centerPoint,
-    viewMode: '2D'
+    resizeEnable: true // 加上这个，确保容器大小变化时地图重新计算
   });
 
   const marker = new AMap.Marker({

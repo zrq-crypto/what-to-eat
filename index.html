@@ -28,16 +28,25 @@
   .filter-btn.active { background: #2ed573; color: white; font-weight: bold; }
 
   .result-card {
-    background: #fff3e0; padding: 15px; border-radius: 16px; margin: 20px 0;
+    background: #fff; padding: 15px; border-radius: 16px; margin: 20px 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     border: 2px dashed #f39c12; transition: all 0.3s ease;
   }
   
-  .food-img {
-    width: 100%; height: 160px; object-fit: cover;
-    border-radius: 12px; margin-bottom: 15px;
-    background-color: #f0f0f0; 
+  /* 用代码画出来的精美占位图 */
+  .food-img-placeholder {
+    width: 100%; height: 150px; border-radius: 12px; margin-bottom: 15px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 50px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #ccc, #999); /* 默认颜色 */
   }
+  .food-img-placeholder span { font-size: 16px; margin-top: 10px; font-weight: bold; }
+
+  /* 不同分类不同颜色 */
+  .bg-fan { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+  .bg-mian { background: linear-gradient(135deg, #f6d365 0%, #f39c12 100%); }
+  .bg-qingshi { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+  .bg-xican { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
 
   .food-name { font-size: 24px; font-weight: bold; color: #e67e22; margin-bottom: 8px; }
   .food-rating { font-size: 14px; color: #f39c12; margin-bottom: 12px; font-weight: bold; }
@@ -88,32 +97,12 @@
   </div>
 
 <script>
-// 图片素材库
-const images = {
-  "饭": [
-    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500", 
-    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
-    "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
-    "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500"
-  ],
-  "面": [
-    "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500",
-    "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=500",
-    "https://images.unsplash.com/photo-1552611052-33e04de081de?w=500",
-    "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?w=500"
-  ],
-  "轻食": [
-    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
-    "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500",
-    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500",
-    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500"
-  ],
-  "西餐": [
-    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", // 汉堡
-    "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500", // 披萨
-    "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500", // 意面
-    "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500"  // 牛排
-  ]
+// 各种分类对应的图标和颜色类名
+const typeMap = {
+  "饭": { icon: "🍚", class: "bg-fan" },
+  "面": { icon: "🍜", class: "bg-mian" },
+  "轻食": { icon: "🥗", class: "bg-qingshi" },
+  "西餐": { icon: "🍔", class: "bg-xican" }
 };
 
 const prefixes = ["一食堂", "二食堂", "三食堂", "四食堂", "五食堂", "二楼", "三楼", "小吃街", "南门", "北门", "清真", "教工", "西区", "东区"];
@@ -127,53 +116,11 @@ let foodData = [];
 
 function generateDatabase() {
   let id = 0;
-  // 生成饭类
   for (let i = 0; i < 20; i++) {
-    rices.forEach(r => {
-      foodData.push({
-        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + r, type: "饭",
-        price: Math.floor(Math.random()*15)+10, calorie: Math.floor(Math.random()*400)+600,
-        healthy: false, taste: (Math.random()*2+3).toFixed(1), 
-        reason: reasons[Math.floor(Math.random()*reasons.length)],
-        img: images["饭"][Math.floor(Math.random()*images["饭"].length)]
-      });
-    });
-  }
-  // 生成面类
-  for (let i = 0; i < 20; i++) {
-    noodles.forEach(n => {
-      foodData.push({
-        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + n, type: "面",
-        price: Math.floor(Math.random()*12)+9, calorie: Math.floor(Math.random()*300)+500,
-        healthy: false, taste: (Math.random()*2+3).toFixed(1),
-        reason: reasons[Math.floor(Math.random()*reasons.length)],
-        img: images["面"][Math.floor(Math.random()*images["面"].length)]
-      });
-    });
-  }
-  // 生成轻食
-  for (let i = 0; i < 20; i++) {
-    salads.forEach(s => {
-      foodData.push({
-        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + s, type: "轻食",
-        price: Math.floor(Math.random()*10)+15, calorie: Math.floor(Math.random()*200)+250,
-        healthy: true, taste: (Math.random()*2+2.5).toFixed(1),
-        reason: reasons[Math.floor(Math.random()*reasons.length)],
-        img: images["轻食"][Math.floor(Math.random()*images["轻食"].length)]
-      });
-    });
-  }
-  // 生成西餐
-  for (let i = 0; i < 20; i++) {
-    westerns.forEach(w => {
-      foodData.push({
-        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + w, type: "西餐",
-        price: Math.floor(Math.random()*20)+25, calorie: Math.floor(Math.random()*500)+700,
-        healthy: false, taste: (Math.random()*2+3.5).toFixed(1),
-        reason: reasons[Math.floor(Math.random()*reasons.length)],
-        img: images["西餐"][Math.floor(Math.random()*images["西餐"].length)]
-      });
-    });
+    rices.forEach(r => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + r, type: "饭", price: Math.floor(Math.random()*15)+10, calorie: Math.floor(Math.random()*400)+600, healthy: false, taste: (Math.random()*2+3).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    noodles.forEach(n => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + n, type: "面", price: Math.floor(Math.random()*12)+9, calorie: Math.floor(Math.random()*300)+500, healthy: false, taste: (Math.random()*2+3).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    salads.forEach(s => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + s, type: "轻食", price: Math.floor(Math.random()*10)+15, calorie: Math.floor(Math.random()*200)+250, healthy: true, taste: (Math.random()*2+2.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    westerns.forEach(w => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + w, type: "西餐", price: Math.floor(Math.random()*20)+25, calorie: Math.floor(Math.random()*500)+700, healthy: false, taste: (Math.random()*2+3.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
   }
 }
 generateDatabase(); 
@@ -200,9 +147,15 @@ function roll() {
   else if (currentFood.taste >= 3.5) stars = "⭐⭐⭐ (中规中矩)";
   else stars = "⭐⭐ (踩雷预警)";
 
+  // 获取对应的图标和颜色
+  let map = typeMap[currentFood.type];
+
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
-    < img src="${currentFood.img}" class="food-img" alt="美食图片">
+    <div class="food-img-placeholder ${map.class}">
+      ${map.icon}
+      <span>${currentFood.type}类美食</span>
+    </div>
     <div class="food-name">${currentFood.name}</div>
     <div class="food-rating">好评度：${currentFood.taste} 分 ${stars}</div>
     <div class="food-info">

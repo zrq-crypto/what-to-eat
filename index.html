@@ -3,127 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>今天吃什么 | 校园干饭王</title>
+<title>今天吃什么 | 中华美食盲盒</title>
+
+<!-- 自动填入了你的安全密钥 -->
+<script type="text/javascript">
+  window._AMapSecurityConfig = {
+      securityJsCode: '19857a766d31b8391e56609c2ede0d63', 
+  }
+</script>
+<!-- 自动填入了你的 Key -->
+<script src="https://webapi.amap.com/maps?v=2.0&key=7196c3f9ef466bdf10e142baadd32f5"></script>
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 20px; color: #333;
-  }
-  .container {
-    background: white; padding: 30px 20px; border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    text-align: center; max-width: 420px; width: 100%; margin-top: 20px;
-  }
-  h1 { font-size: 24px; color: #2c3e50; margin-bottom: 20px; }
-  
-  .filter-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filter-btn {
-    background: #f1f2f6; border: none; padding: 8px 16px; border-radius: 20px;
-    font-size: 14px; color: #57606f; cursor: pointer; transition: 0.2s;
-  }
-  .filter-btn.active { background: #2ed573; color: white; font-weight: bold; }
-
-  .result-card {
-    background: #fff; padding: 15px; border-radius: 16px; margin: 20px 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 2px dashed #f39c12; transition: all 0.3s ease;
+    min-height: 100vh; color: #333;
+    padding-bottom: 70px;
   }
   
-  /* 用代码画出来的精美占位图 */
-  .food-img-placeholder {
-    width: 100%; height: 150px; border-radius: 12px; margin-bottom: 15px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-size: 50px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    background: linear-gradient(135deg, #ccc, #999); /* 默认颜色 */
+  .page { display: none; padding: 20px; max-width: 420px; margin: 0 auto; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .container-card {
+    background: white; padding: 25px 20px; border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    text-align: center; margin-top: 20px;
   }
-  .food-img-placeholder span { font-size: 16px; margin-top: 10px; font-weight: bold; }
-
-  /* 不同分类不同颜色 */
-  .bg-fan { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-  .bg-mian { background: linear-gradient(135deg, #f6d365 0%, #f39c12 100%); }
-  .bg-qingshi { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
-  .bg-xican { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
-
-  .food-name { font-size: 24px; font-weight: bold; color: #e67e22; margin-bottom: 8px; }
-  .food-rating { font-size: 14px; color: #f39c12; margin-bottom: 12px; font-weight: bold; }
+  h1 { font-size: 22px; color: #2c3e50; margin-bottom: 15px; }
+  h2 { font-size: 18px; color: #2c3e50; margin-bottom: 15px; text-align: left;}
   
-  .food-info { font-size: 13px; color: #7f8c8d; display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center;}
-  .tag { background: #ecf0f1; padding: 3px 8px; border-radius: 4px; }
+  .filter-group { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn { background: #f1f2f6; border: none; padding: 6px 12px; border-radius: 20px; font-size: 13px; color: #57606f; cursor: pointer; transition: 0.2s; }
+  .filter-btn.active { background: #e67e22; color: white; font-weight: bold; }
   
-  .food-reason { font-size: 14px; color: #d35400; font-style: italic; margin-top: 5px;}
+  .result-card { background: #fff; padding: 15px; border-radius: 16px; margin: 15px 0; border: 2px dashed #e67e22; }
+  .food-img-placeholder { width: 100%; height: 120px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 40px; color: white; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  .food-img-placeholder span { font-size: 14px; margin-top: 5px; font-weight: bold; }
+  
+  .bg-chuanyu { background: linear-gradient(135deg, #ff6b6b, #c0392b); } 
+  .bg-yueguang { background: linear-gradient(135deg, #1dd1a1, #10ac84); } 
+  .bg-beifang { background: linear-gradient(135deg, #feca57, #ff9f43); } 
+  .bg-jiangnan { background: linear-gradient(135deg, #48dbfb, #0abde3); } 
 
-  .btn-main {
-    background: #e67e22; color: white; border: none; padding: 16px 32px;
-    font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%;
-    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4); transition: transform 0.1s;
-  }
+  .food-name { font-size: 22px; font-weight: bold; color: #d35400; margin-bottom: 5px; }
+  .food-rating { font-size: 13px; color: #f39c12; margin-bottom: 10px; font-weight: bold; }
+  .food-info { font-size: 12px; color: #7f8c8d; display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; flex-wrap: wrap;}
+  .tag { background: #ecf0f1; padding: 2px 6px; border-radius: 4px; }
+  .food-reason { font-size: 13px; color: #d35400; font-style: italic; }
+
+  .btn-main { background: #e67e22; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; transition: transform 0.1s; margin-top: 10px;}
   .btn-main:active { transform: scale(0.96); }
-  
-  .action-group { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
-  .btn-sub { flex: 1; background: #f1f2f6; color: #57606f; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500; }
-  .btn-sub:active { background: #dfe4ea; }
-  #report-msg { margin-top: 15px; font-size: 14px; color: #27ae60; height: 20px; font-weight: bold; }
+  .action-group { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-sub { flex: 1; background: #f1f2f6; color: #57606f; border: none; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 13px; }
+  #report-msg { margin-top: 10px; font-size: 13px; color: #27ae60; height: 18px; font-weight: bold; }
+
+  .rank-list { text-align: left; }
+  .rank-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+  .rank-num { font-size: 18px; font-weight: bold; width: 30px; color: #95a5a6; }
+  .rank-num.top { color: #e74c3c; }
+  .rank-info { flex: 1; }
+  .rank-name { font-size: 15px; font-weight: bold; color: #333; }
+  .rank-sub { font-size: 12px; color: #7f8c8d; }
+  .rank-score { font-size: 14px; color: #f39c12; font-weight: bold; }
+
+  #map-container { width: 100%; height: 450px; border-radius: 16px; margin-top: 15px; background: #e0e0e0; }
+
+  .about-text { text-align: left; font-size: 14px; line-height: 1.6; color: #555; }
+  .about-text p { margin-bottom: 10px; }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%; background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-around;
+    padding: 10px 0 15px 0; z-index: 100;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95a5a6; cursor: pointer; transition: 0.2s; }
+  .nav-item.active { color: #e67e22; font-weight: bold; }
+  .nav-icon { font-size: 20px; margin-bottom: 4px; }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🍜 今天吃什么？</h1>
-    
-    <div class="filter-group">
-      <button class="filter-btn active" onclick="setCategory('all', this)">全部</button>
-      <button class="filter-btn" onclick="setCategory('饭', this)">🍚 饭类</button>
-      <button class="filter-btn" onclick="setCategory('面', this)">🍜 面食</button>
-      <button class="filter-btn" onclick="setCategory('轻食', this)">🥗 健康轻食</button>
-      <button class="filter-btn" onclick="setCategory('西餐', this)">🍔 西餐</button>
-    </div>
 
-    <div id="result" class="result-card">
-      <div class="food-name">点击下方按钮</div>
-      <div class="food-info">让命运决定你的午餐</div>
+  <div id="page-home" class="page active">
+    <div class="container-card">
+      <h1>🥢 中华美食盲盒</h1>
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="setCategory('all', this)">全部</button>
+        <button class="filter-btn" onclick="setCategory('川渝', this)">🌶️ 川渝</button>
+        <button class="filter-btn" onclick="setCategory('粤广', this)">🥟 粤广</button>
+        <button class="filter-btn" onclick="setCategory('北方', this)">🍖 北方</button>
+        <button class="filter-btn" onclick="setCategory('江南', this)">🍵 江南</button>
+      </div>
+
+      <div id="result" class="result-card">
+        <div class="food-name">今天吃点啥？</div>
+        <div class="food-info">让命运决定你的味蕾</div>
+      </div>
+      
+      <button class="btn-main" onclick="roll()">🎲 随机开启盲盒</button>
+      
+      <div class="action-group">
+        <button class="btn-sub" onclick="report('想吃')">🤤 想吃</button>
+        <button class="btn-sub" onclick="report('吃过了')">😎 吃过</button>
+        <button class="btn-sub" onclick="share()">🔗 分享</button>
+      </div>
+      <div id="report-msg"></div>
     </div>
-    
-    <button class="btn-main" onclick="roll()">🎲 随机推荐一家</button>
-    
-    <div class="action-group">
-      <button class="btn-sub" onclick="report('人少先冲')">🙋‍♂️ 人少先冲</button>
-      <button class="btn-sub" onclick="report('排队别去')">🏃‍♂️ 排队别去</button>
-      <button class="btn-sub" onclick="share()">🔗 分享</button>
+  </div>
+
+  <div id="page-map" class="page">
+    <div class="container-card" style="padding: 15px;">
+      <h2>🗺️ 附近美食地图</h2>
+      <p style="text-align:left; font-size:13px; color:#7f8c8d; margin-bottom:10px;">点击地图红点，看看附近有什么好吃的</p >
+      <div id="map-container"></div>
     </div>
-    <div id="report-msg"></div>
+  </div>
+
+  <div id="page-rank" class="page">
+    <div class="container-card">
+      <h2>🏆 全国好评 Top 5</h2>
+      <div id="top-list" class="rank-list"></div>
+      <h2 style="margin-top: 25px;">💣 黑暗料理预警 Top 5</h2>
+      <div id="bad-list" class="rank-list"></div>
+    </div>
+  </div>
+
+  <div id="page-about" class="page">
+    <div class="container-card">
+      <h2>💡 关于本项目</h2>
+      <div class="about-text">
+        <p><strong>项目背景：</strong>从校园食堂痛点出发，迭代升级为“全国美食盲盒”。解决“今天吃什么”这个世纪难题。</p >
+        <p><strong>产品理念：</strong>收录各地特色美食，内置真实的卡路里与模拟好评度，结合地图功能帮你发现附近的美食。</p >
+        <p><strong>技术实现：</strong>纯前端单页面，数据动态生成，接入了高德地图 Web API。</p >
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPage('home', this)">
+      <div class="nav-icon">🏠</div><div>摇一摇</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('map', this)">
+      <div class="nav-icon">🗺️</div><div>地图</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('rank', this)">
+      <div class="nav-icon">🏆</div><div>红黑榜</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('about', this)">
+      <div class="nav-icon">💡</div><div>关于</div>
+    </div>
   </div>
 
 <script>
-// 各种分类对应的图标和颜色类名
-const typeMap = {
-  "饭": { icon: "🍚", class: "bg-fan" },
-  "面": { icon: "🍜", class: "bg-mian" },
-  "轻食": { icon: "🥗", class: "bg-qingshi" },
-  "西餐": { icon: "🍔", class: "bg-xican" }
-};
-
-const prefixes = ["一食堂", "二食堂", "三食堂", "四食堂", "五食堂", "二楼", "三楼", "小吃街", "南门", "北门", "清真", "教工", "西区", "东区"];
-const rices = ["黄焖鸡", "麻辣香锅", "烤肉拌饭", "石锅拌饭", "盖浇饭", "铁板炒饭", "猪脚饭", "鸡公煲", "瓦罐汤套餐", "蛋炒饭", "猪排饭", "咖喱饭"];
-const noodles = ["牛肉面", "螺蛳粉", "重庆小面", "过桥米线", "兰州拉面", "炸酱面", "热干面", "刀削面", "酸辣粉", "肥肠面", "担担面"];
-const salads = ["轻食沙拉", "水煮鸡胸肉", "全麦三明治", "减脂波奇饭", "蔬菜卷饼", "无糖酸奶碗", "烤南瓜藜麦", "能量牛肉碗"];
-const westerns = ["黑椒牛排", "番茄肉酱意面", "经典牛肉汉堡", "炸鸡薯条", "培根披萨", "凯撒沙拉", "总汇三明治", "美式热狗", "芝士焗饭", "奶油蘑菇汤"];
-const reasons = ["碳水使我快乐！", "吃完这顿就减肥。", "灵魂汤汁，绝绝子。", "性价比之王，还要啥自行车。", "排了半小时，不好吃也得说好吃。", "建议搭配奶茶食用。", "今天也是自律的一天。", "吃草的一天，感觉身体变轻盈了。", "闻着臭，吃着香！", "肉多管饱，干饭人首选。", "这顿吃完，钱包又瘪了。"];
+const typeMap = { "川渝": { icon: "🌶️", class: "bg-chuanyu" }, "粤广": { icon: "🥟", class: "bg-yueguang" }, "北方": { icon: "🍖", class: "bg-beifang" }, "江南": { icon: "🍵", class: "bg-jiangnan" } };
+const chuanyuFoods = ["重庆火锅", "麻婆豆腐", "回锅肉", "酸菜鱼", "钵钵鸡", "重庆小面", "毛血旺", "水煮肉片", "冷吃兔", "担担面"];
+const yueguangFoods = ["广式早茶", "隆江猪脚饭", "白切鸡", "潮汕牛肉火锅", "煲仔饭", "干炒牛河", "肠粉", "虾饺", "双皮奶", "烧鹅"];
+const beifangFoods = ["北京烤鸭", "兰州拉面", "肉夹馍", "东北锅包肉", "烤冷面", "溜肉段", "羊肉泡馍", "煎饼果子", "新疆大盘鸡", "陕西凉皮"];
+const jiangnanFoods = ["西湖醋鱼", "东坡肉", "扬州炒饭", "南京盐水鸭", "蟹粉小笼包", "松鼠桂鱼", "阳澄湖大闸蟹", "生煎包", "片儿川", "嘉兴粽子"];
+const reasons = ["吃货必打卡！", "排队两小时也值了。", "碳水炸弹，快乐无边。", "有点小贵，但真香。", "本地人强烈推荐。", "口味偏甜，外地人慎点。", "吃一口就停不下来。", "减肥路上的绊脚石。", "重油重辣，极其下饭。", "这是真·黑暗料理吗？"];
 
 let foodData = [];
-
 function generateDatabase() {
   let id = 0;
-  for (let i = 0; i < 20; i++) {
-    rices.forEach(r => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + r, type: "饭", price: Math.floor(Math.random()*15)+10, calorie: Math.floor(Math.random()*400)+600, healthy: false, taste: (Math.random()*2+3).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
-    noodles.forEach(n => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + n, type: "面", price: Math.floor(Math.random()*12)+9, calorie: Math.floor(Math.random()*300)+500, healthy: false, taste: (Math.random()*2+3).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
-    salads.forEach(s => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + s, type: "轻食", price: Math.floor(Math.random()*10)+15, calorie: Math.floor(Math.random()*200)+250, healthy: true, taste: (Math.random()*2+2.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
-    westerns.forEach(w => foodData.push({ id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + w, type: "西餐", price: Math.floor(Math.random()*20)+25, calorie: Math.floor(Math.random()*500)+700, healthy: false, taste: (Math.random()*2+3.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+  for (let i = 0; i < 15; i++) {
+    chuanyuFoods.forEach(f => foodData.push({ id: id++, name: f, type: "川渝", price: Math.floor(Math.random()*40)+25, calorie: Math.floor(Math.random()*400)+500, healthy: false, taste: (Math.random()*1.5+3.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    yueguangFoods.forEach(f => foodData.push({ id: id++, name: f, type: "粤广", price: Math.floor(Math.random()*60)+30, calorie: Math.floor(Math.random()*300)+300, healthy: true, taste: (Math.random()*1.5+3.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    beifangFoods.forEach(f => foodData.push({ id: id++, name: f, type: "北方", price: Math.floor(Math.random()*30)+15, calorie: Math.floor(Math.random()*500)+600, healthy: false, taste: (Math.random()*1.5+3.5).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
+    jiangnanFoods.forEach(f => foodData.push({ id: id++, name: f, type: "江南", price: Math.floor(Math.random()*50)+40, calorie: Math.floor(Math.random()*300)+400, healthy: true, taste: (Math.random()*1.5+3.0).toFixed(1), reason: reasons[Math.floor(Math.random()*reasons.length)] }));
   }
 }
 generateDatabase(); 
+
+let mapInstance = null;
+
+function switchPage(pageId, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  navEl.classList.add('active');
+
+  if (pageId === 'rank') {
+    renderRankings();
+  } else if (pageId === 'map' && !mapInstance) {
+    initMap(); 
+  }
+}
+
+function initMap() {
+  // 已经改成了你学校（福州外语外贸学院滨海校区）的坐标
+  const centerPoint = [119.671, 25.907]; 
+
+  mapInstance = new AMap.Map('map-container', {
+    zoom: 15, 
+    center: centerPoint,
+    viewMode: '2D'
+  });
+
+  const marker = new AMap.Marker({
+    position: centerPoint,
+    title: '美食中心',
+    label: {
+        content: "<div style='background:white; padding:4px 8px; border-radius:4px; border:1px solid #ccc; font-size:12px; font-weight:bold; color:#e67e22;'>📍 你的学校在这</div>",
+        offset: new AMap.Pixel(0, -30)
+    }
+  });
+  mapInstance.add(marker);
+}
 
 let currentCategory = 'all';
 let currentFood = null;
@@ -141,29 +229,17 @@ function roll() {
   }
   currentFood = pool[Math.floor(Math.random() * pool.length)];
   
-  let stars = "";
-  if (currentFood.taste >= 4.5) stars = "⭐⭐⭐⭐⭐ (强烈推荐)";
-  else if (currentFood.taste >= 4.0) stars = "⭐⭐⭐⭐ (值得一试)";
-  else if (currentFood.taste >= 3.5) stars = "⭐⭐⭐ (中规中矩)";
-  else stars = "⭐⭐ (踩雷预警)";
-
-  // 获取对应的图标和颜色
+  let stars = currentFood.taste >= 4.5 ? "⭐⭐⭐⭐⭐" : (currentFood.taste >= 4.0 ? "⭐⭐⭐⭐" : (currentFood.taste >= 3.5 ? "⭐⭐⭐" : "⭐⭐"));
   let map = typeMap[currentFood.type];
 
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `
-    <div class="food-img-placeholder ${map.class}">
-      ${map.icon}
-      <span>${currentFood.type}类美食</span>
-    </div>
+  document.getElementById('result').innerHTML = `
+    <div class="food-img-placeholder ${map.class}">${map.icon}<span>${currentFood.type}风味</span></div>
     <div class="food-name">${currentFood.name}</div>
     <div class="food-rating">好评度：${currentFood.taste} 分 ${stars}</div>
     <div class="food-info">
-      <span class="tag">¥${currentFood.price}</span>
+      <span class="tag">人均 ¥${currentFood.price}</span>
       <span class="tag">${currentFood.calorie} 大卡</span>
-      <span class="tag" style="color:${currentFood.healthy ? '#27ae60' : '#e74c3c'}">
-        ${currentFood.healthy ? '健康' : '高热量'}
-      </span>
+      <span class="tag" style="color:${currentFood.healthy ? '#27ae60' : '#e74c3c'}">${currentFood.healthy ? '清淡/健康' : '重油/高热量'}</span>
     </div>
     <div class="food-reason">"${currentFood.reason}"</div>
   `;
@@ -171,14 +247,36 @@ function roll() {
 }
 
 function report(type) {
- if(!currentFood){alert("先摇一个食堂再说！");return;}
- document.getElementById('report-msg').innerText="✅ 已上报："+type+"（"+currentFood.name+"）";
+ if(!currentFood){alert("先摇一个美食再说！");return;}
+ document.getElementById('report-msg').innerText="✅ 已标记："+type+"（"+currentFood.name+"）";
 }
 
 function share() {
- if(!currentFood){alert("先摇一个食堂再说！");return;}
- const text = `今天吃什么？系统推荐我吃【${currentFood.name}】，好评度${currentFood.taste}分，只要¥${currentFood.price}！人少先冲！`;
+ if(!currentFood){alert("先摇一个美食再说！");return;}
+ const text = `中华美食盲盒摇到了【${currentFood.name}】！好评度${currentFood.taste}分，人均¥${currentFood.price}。你想吃吗？`;
  navigator.clipboard.writeText(text).then(()=>alert("分享文案已复制！\n\n" + text)).catch(()=>prompt("手动复制",text));
+}
+
+function renderRankings() {
+  let sorted = [...foodData].sort((a, b) => b.taste - a.taste);
+  
+  let topListHTML = "";
+  let topUnique = [];
+  let seen = new Set();
+  sorted.forEach(f => { if(!seen.has(f.name)) { topUnique.push(f); seen.add(f.name); } });
+  topUnique.slice(0, 5).forEach((food, index) => {
+    topListHTML += `<div class="rank-item"><div class="rank-num top">${index + 1}</div><div class="rank-info"><div class="rank-name">${food.name} <small style="color:#95a5a6;font-size:11px;">(${food.type})</small></div><div class="rank-sub">人均¥${food.price} | ${food.calorie}大卡</div></div><div class="rank-score">${food.taste}分</div></div>`;
+  });
+  document.getElementById('top-list').innerHTML = topListHTML;
+
+  let badListHTML = "";
+  let badUnique = [];
+  let seenBad = new Set();
+  sorted.reverse().forEach(f => { if(!seenBad.has(f.name)) { badUnique.push(f); seenBad.add(f.name); } });
+  badUnique.slice(0, 5).forEach((food, index) => {
+    badListHTML += `<div class="rank-item"><div class="rank-num">${index + 1}</div><div class="rank-info"><div class="rank-name">${food.name} <small style="color:#95a5a6;font-size:11px;">(${food.type})</small></div><div class="rank-sub">"${food.reason}"</div></div><div class="rank-score" style="color:#e74c3c;">${food.taste}分</div></div>`;
+  });
+  document.getElementById('bad-list').innerHTML = badListHTML;
 }
 </script>
 </body>

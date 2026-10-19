@@ -3,107 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>今天吃什么 | 校园食堂版</title>
+<title>今天吃什么 | 校园干饭王</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    color: #333;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px; color: #333;
   }
   .container {
-    background: white;
-    padding: 30px 20px;
-    border-radius: 24px;
+    background: white; padding: 30px 20px; border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    text-align: center;
-    max-width: 420px;
-    width: 100%;
-    margin-top: 20px;
+    text-align: center; max-width: 420px; width: 100%; margin-top: 20px;
   }
   h1 { font-size: 24px; color: #2c3e50; margin-bottom: 20px; }
   
-  /* 分类按钮 */
-  .filter-group {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+  .filter-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
   .filter-btn {
-    background: #f1f2f6;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 14px;
-    color: #57606f;
-    cursor: pointer;
-    transition: 0.2s;
+    background: #f1f2f6; border: none; padding: 8px 16px; border-radius: 20px;
+    font-size: 14px; color: #57606f; cursor: pointer; transition: 0.2s;
   }
-  .filter-btn.active {
-    background: #2ed573;
-    color: white;
-    font-weight: bold;
-  }
+  .filter-btn.active { background: #2ed573; color: white; font-weight: bold; }
 
-  /* 结果卡片 */
   .result-card {
-    background: #fff3e0;
-    padding: 30px 20px;
-    border-radius: 16px;
-    margin: 20px 0;
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #f39c12;
-    transition: all 0.3s ease;
+    background: #fff3e0; padding: 15px; border-radius: 16px; margin: 20px 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px dashed #f39c12; transition: all 0.3s ease;
   }
-  .food-name { font-size: 28px; font-weight: bold; color: #e67e22; margin-bottom: 10px; }
-  .food-info { font-size: 14px; color: #7f8c8d; display: flex; gap: 10px; margin-bottom: 15px;}
-  .tag { background: #ecf0f1; padding: 2px 8px; border-radius: 4px; }
-  .food-reason { font-size: 15px; color: #d35400; font-style: italic; }
+  
+  .food-img {
+    width: 100%; height: 160px; object-fit: cover;
+    border-radius: 12px; margin-bottom: 15px;
+    background-color: #f0f0f0; 
+  }
 
-  /* 按钮 */
+  .food-name { font-size: 24px; font-weight: bold; color: #e67e22; margin-bottom: 8px; }
+  .food-rating { font-size: 14px; color: #f39c12; margin-bottom: 12px; font-weight: bold; }
+  
+  .food-info { font-size: 13px; color: #7f8c8d; display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center;}
+  .tag { background: #ecf0f1; padding: 3px 8px; border-radius: 4px; }
+  
+  .food-reason { font-size: 14px; color: #d35400; font-style: italic; margin-top: 5px;}
+
   .btn-main {
-    background: #e67e22;
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 50px;
-    cursor: pointer;
-    width: 100%;
-    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
-    transition: transform 0.1s;
+    background: #e67e22; color: white; border: none; padding: 16px 32px;
+    font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4); transition: transform 0.1s;
   }
   .btn-main:active { transform: scale(0.96); }
   
-  .action-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  .btn-sub {
-    flex: 1;
-    background: #f1f2f6;
-    color: #57606f;
-    border: none;
-    padding: 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-  }
+  .action-group { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+  .btn-sub { flex: 1; background: #f1f2f6; color: #57606f; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500; }
   .btn-sub:active { background: #dfe4ea; }
   #report-msg { margin-top: 15px; font-size: 14px; color: #27ae60; height: 20px; font-weight: bold; }
 </style>
@@ -112,12 +64,12 @@
   <div class="container">
     <h1>🍜 今天吃什么？</h1>
     
-    <!-- 分类筛选 -->
     <div class="filter-group">
       <button class="filter-btn active" onclick="setCategory('all', this)">全部</button>
       <button class="filter-btn" onclick="setCategory('饭', this)">🍚 饭类</button>
       <button class="filter-btn" onclick="setCategory('面', this)">🍜 面食</button>
       <button class="filter-btn" onclick="setCategory('轻食', this)">🥗 健康轻食</button>
+      <button class="filter-btn" onclick="setCategory('西餐', this)">🍔 西餐</button>
     </div>
 
     <div id="result" class="result-card">
@@ -136,53 +88,123 @@
   </div>
 
 <script>
-// 这就是我们的“伪数据库”
-const foodData = [
-  { name: "一食堂麻辣香锅", type: "饭", price: 15, calorie: 800, healthy: false, reason: "碳水+脂肪，快乐加倍！" },
-  { name: "二食堂牛肉面", type: "面", price: 12, calorie: 600, healthy: false, reason: "大口嗦面，大口喝汤。" },
-  { name: "三食堂自选快餐", type: "饭", price: 10, calorie: 700, healthy: false, reason: "荤素搭配，性价比之王。" },
-  { name: "四食堂黄焖鸡", type: "饭", price: 16, calorie: 850, healthy: false, reason: "汤汁拌饭，绝绝子。" },
-  { name: "五食堂螺蛳粉", type: "面", price: 14, calorie: 550, healthy: false, reason: "闻着臭，吃着香，吃完没朋友。" },
-  { name: "轻食沙拉碗", type: "轻食", price: 18, calorie: 300, healthy: true, reason: "吃草的一天，感觉身体变轻盈了。" },
-  { name: "水煮鸡胸肉套餐", type: "轻食", price: 15, calorie: 400, healthy: true, reason: "增肌减脂必备，虽然有点难吃。" },
-  { name: "兰州拉面", type: "面", price: 13, calorie: 650, healthy: false, reason: "一清二白三红四绿，好吃！" },
-  { name: "石锅拌饭", type: "饭", price: 16, calorie: 750, healthy: false, reason: "底下的锅巴是灵魂。" },
-  { name: "番茄鸡蛋盖浇饭", type: "饭", price: 11, calorie: 600, healthy: true, reason: "不知道吃啥时的终极保底选项。" },
-  { name: "过桥米线", type: "面", price: 15, calorie: 700, healthy: false, reason: "热腾腾的汤，暖胃又暖心。" },
-  { name: "全麦三明治", type: "轻食", price: 12, calorie: 350, healthy: true, reason: "假装自己是个自律的打工人。" }
-];
+// 图片素材库
+const images = {
+  "饭": [
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500", 
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+    "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
+    "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500"
+  ],
+  "面": [
+    "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500",
+    "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=500",
+    "https://images.unsplash.com/photo-1552611052-33e04de081de?w=500",
+    "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?w=500"
+  ],
+  "轻食": [
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+    "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500",
+    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500",
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500"
+  ],
+  "西餐": [
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", // 汉堡
+    "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500", // 披萨
+    "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500", // 意面
+    "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500"  // 牛排
+  ]
+};
+
+const prefixes = ["一食堂", "二食堂", "三食堂", "四食堂", "五食堂", "二楼", "三楼", "小吃街", "南门", "北门", "清真", "教工", "西区", "东区"];
+const rices = ["黄焖鸡", "麻辣香锅", "烤肉拌饭", "石锅拌饭", "盖浇饭", "铁板炒饭", "猪脚饭", "鸡公煲", "瓦罐汤套餐", "蛋炒饭", "猪排饭", "咖喱饭"];
+const noodles = ["牛肉面", "螺蛳粉", "重庆小面", "过桥米线", "兰州拉面", "炸酱面", "热干面", "刀削面", "酸辣粉", "肥肠面", "担担面"];
+const salads = ["轻食沙拉", "水煮鸡胸肉", "全麦三明治", "减脂波奇饭", "蔬菜卷饼", "无糖酸奶碗", "烤南瓜藜麦", "能量牛肉碗"];
+const westerns = ["黑椒牛排", "番茄肉酱意面", "经典牛肉汉堡", "炸鸡薯条", "培根披萨", "凯撒沙拉", "总汇三明治", "美式热狗", "芝士焗饭", "奶油蘑菇汤"];
+const reasons = ["碳水使我快乐！", "吃完这顿就减肥。", "灵魂汤汁，绝绝子。", "性价比之王，还要啥自行车。", "排了半小时，不好吃也得说好吃。", "建议搭配奶茶食用。", "今天也是自律的一天。", "吃草的一天，感觉身体变轻盈了。", "闻着臭，吃着香！", "肉多管饱，干饭人首选。", "这顿吃完，钱包又瘪了。"];
+
+let foodData = [];
+
+function generateDatabase() {
+  let id = 0;
+  // 生成饭类
+  for (let i = 0; i < 20; i++) {
+    rices.forEach(r => {
+      foodData.push({
+        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + r, type: "饭",
+        price: Math.floor(Math.random()*15)+10, calorie: Math.floor(Math.random()*400)+600,
+        healthy: false, taste: (Math.random()*2+3).toFixed(1), 
+        reason: reasons[Math.floor(Math.random()*reasons.length)],
+        img: images["饭"][Math.floor(Math.random()*images["饭"].length)]
+      });
+    });
+  }
+  // 生成面类
+  for (let i = 0; i < 20; i++) {
+    noodles.forEach(n => {
+      foodData.push({
+        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + n, type: "面",
+        price: Math.floor(Math.random()*12)+9, calorie: Math.floor(Math.random()*300)+500,
+        healthy: false, taste: (Math.random()*2+3).toFixed(1),
+        reason: reasons[Math.floor(Math.random()*reasons.length)],
+        img: images["面"][Math.floor(Math.random()*images["面"].length)]
+      });
+    });
+  }
+  // 生成轻食
+  for (let i = 0; i < 20; i++) {
+    salads.forEach(s => {
+      foodData.push({
+        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + s, type: "轻食",
+        price: Math.floor(Math.random()*10)+15, calorie: Math.floor(Math.random()*200)+250,
+        healthy: true, taste: (Math.random()*2+2.5).toFixed(1),
+        reason: reasons[Math.floor(Math.random()*reasons.length)],
+        img: images["轻食"][Math.floor(Math.random()*images["轻食"].length)]
+      });
+    });
+  }
+  // 生成西餐
+  for (let i = 0; i < 20; i++) {
+    westerns.forEach(w => {
+      foodData.push({
+        id: id++, name: prefixes[Math.floor(Math.random()*prefixes.length)] + w, type: "西餐",
+        price: Math.floor(Math.random()*20)+25, calorie: Math.floor(Math.random()*500)+700,
+        healthy: false, taste: (Math.random()*2+3.5).toFixed(1),
+        reason: reasons[Math.floor(Math.random()*reasons.length)],
+        img: images["西餐"][Math.floor(Math.random()*images["西餐"].length)]
+      });
+    });
+  }
+}
+generateDatabase(); 
 
 let currentCategory = 'all';
 let currentFood = null;
 
-// 切换分类
 function setCategory(type, btn) {
   currentCategory = type;
-  // 更新按钮样式
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-// 抽取逻辑
 function roll() {
-  // 先根据分类过滤（模拟数据库查询）
   let pool = foodData;
   if (currentCategory !== 'all') {
     pool = foodData.filter(food => food.type === currentCategory);
   }
-
-  if (pool.length === 0) {
-    alert("这个分类下暂时没有菜品哦！");
-    return;
-  }
-
-  // 随机抽取
   currentFood = pool[Math.floor(Math.random() * pool.length)];
   
-  // 渲染界面
+  let stars = "";
+  if (currentFood.taste >= 4.5) stars = "⭐⭐⭐⭐⭐ (强烈推荐)";
+  else if (currentFood.taste >= 4.0) stars = "⭐⭐⭐⭐ (值得一试)";
+  else if (currentFood.taste >= 3.5) stars = "⭐⭐⭐ (中规中矩)";
+  else stars = "⭐⭐ (踩雷预警)";
+
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
+    < img src="${currentFood.img}" class="food-img" alt="美食图片">
     <div class="food-name">${currentFood.name}</div>
+    <div class="food-rating">好评度：${currentFood.taste} 分 ${stars}</div>
     <div class="food-info">
       <span class="tag">¥${currentFood.price}</span>
       <span class="tag">${currentFood.calorie} 大卡</span>
@@ -195,17 +217,15 @@ function roll() {
   document.getElementById('report-msg').innerText="";
 }
 
-// 上报排队情况
 function report(type) {
  if(!currentFood){alert("先摇一个食堂再说！");return;}
  document.getElementById('report-msg').innerText="✅ 已上报："+type+"（"+currentFood.name+"）";
 }
 
-// 分享
 function share() {
  if(!currentFood){alert("先摇一个食堂再说！");return;}
- const text = `今天吃什么？系统推荐我吃【${currentFood.name}】，只要¥${currentFood.price}！人少先冲！`;
- navigator.clipboard.writeText(text).then(()=>alert("分享文案已复制，快去发给同学吧！\n\n" + text)).catch(()=>prompt("手动复制",text));
+ const text = `今天吃什么？系统推荐我吃【${currentFood.name}】，好评度${currentFood.taste}分，只要¥${currentFood.price}！人少先冲！`;
+ navigator.clipboard.writeText(text).then(()=>alert("分享文案已复制！\n\n" + text)).catch(()=>prompt("手动复制",text));
 }
 </script>
 </body>
